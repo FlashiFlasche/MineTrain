@@ -193,7 +193,6 @@ public class MineTrainConfigCommandExecutor implements CommandExecutor {
 						}
 					} else {
 						if(subcmd.equalsIgnoreCase("editline") && args.length == 2 && UUID.fromString(args[1]) != null && player.hasPermission("minetrain.admin.edit")){
-							//TODO permission
 							UUID lineid = UUID.fromString(args[1]);
 							Line line = plugin.getFileManager().getLine(lineid);
 							plugin.editor.put(player, new PlayerEditor(0,line));
@@ -203,7 +202,6 @@ public class MineTrainConfigCommandExecutor implements CommandExecutor {
 							plugin.getEditorMessages().sendEditorMessage(player, 0);
 						}
 						if(subcmd.equalsIgnoreCase("editstation") && args.length == 2 && UUID.fromString(args[1]) != null && player.hasPermission("minetrain.admin.edit")){
-							//TODO permission
 							UUID stationid = UUID.fromString(args[1]);
 							Station station = plugin.getFileManager().getStation(stationid);
 							plugin.editor.put(player, new PlayerEditor(10,station));
@@ -213,7 +211,6 @@ public class MineTrainConfigCommandExecutor implements CommandExecutor {
 							plugin.getEditorMessages().sendEditorMessage(player, 10);
 						}
 						if(subcmd.equalsIgnoreCase("deleteline") && args.length == 2 && UUID.fromString(args[1]) != null && player.hasPermission("minetrain.admin.remove")){
-							//TODO permission
 							//Delete line
 							UUID lineid = UUID.fromString(args[1]);
 							Line line = plugin.getFileManager().getLine(lineid);
@@ -226,7 +223,6 @@ public class MineTrainConfigCommandExecutor implements CommandExecutor {
 							player.performCommand("minetrain list");
 						}
 						if(subcmd.equalsIgnoreCase("deletestation") && args.length == 2 && UUID.fromString(args[1]) != null && player.hasPermission("minetrain.admin.remove")){
-							//TODO permission
 							//Delete station
 							UUID stationid = UUID.fromString(args[1]);
 							Station station = plugin.getFileManager().getStation(stationid);

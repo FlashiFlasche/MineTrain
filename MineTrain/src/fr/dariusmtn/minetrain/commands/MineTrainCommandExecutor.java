@@ -56,6 +56,13 @@ public class MineTrainCommandExecutor implements CommandExecutor{
 				if(args.length > 0) {
 					String subcmd = args[0];
 					//create subcommand
+					if (subcmd.equalsIgnoreCase("reload")) {
+						if (player.hasPermission("minetrain.admin.reload")) {
+							plugin.reloadConfig();
+							sender.sendMessage("§aConfig reloaded!");
+							return true;
+						}
+					}
 					if(subcmd.equalsIgnoreCase("create")) {
 						if(player.hasPermission("minetrain.admin.create")) {
 							if(!plugin.editor.containsKey(player)) {

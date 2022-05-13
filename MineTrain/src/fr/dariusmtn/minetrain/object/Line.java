@@ -70,6 +70,7 @@ public class Line implements ConfigurationSerializable {
 	 */
 	public void setAcronym(String smallname) {
 		this.smallname = smallname.replaceAll("&", "§");
+		this.smallname = smallname.replaceAll("[^\\\\x00-\\\\x7F]", "");
 	}
 
 	/**
@@ -84,6 +85,7 @@ public class Line implements ConfigurationSerializable {
 	 */
 	public void setName(String longname) {
 		this.longname = longname.replaceAll("&", "§");
+		this.longname = longname.replaceAll("[^\\\\x00-\\\\x7F]", "");
 	}
 
 	/**

@@ -575,6 +575,7 @@ public class FancyMessage implements JsonRepresentedObject, Cloneable, Iterable<
 		return messageParts.iterator();
 	}
 
+	@SuppressWarnings("deprecation")
 	private static JsonParser _stringParser = new JsonParser();
 
 	/**
@@ -585,6 +586,7 @@ public class FancyMessage implements JsonRepresentedObject, Cloneable, Iterable<
 	 * @return A {@code FancyMessage} representing the parameterized JSON message.
 	 */
 	public static FancyMessage deserialize(String json) {
+		@SuppressWarnings("deprecation")
 		JsonObject serialized = _stringParser.parse(json).getAsJsonObject();
 		JsonArray extra = serialized.getAsJsonArray("extra"); // Get the extra component
 		FancyMessage returnVal = new FancyMessage();
