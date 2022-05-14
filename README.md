@@ -24,4 +24,4 @@ Yes! That's why MineTrain lightness is great, you can create light rail (tramway
 
 ## :pencil: Discord
 
-Talks, suggestions, bugs: https://discord.gg/w628upr
+Bugs and suggestions are welcome c:
