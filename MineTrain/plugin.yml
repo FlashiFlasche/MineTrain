@@ -1,5 +1,5 @@
 main: fr.dariusmtn.minetrain.Main
-version: b0.1
+version: b0.3
 name: MineTrainRebirth
 author: Flashi, Fuly
 api: MineTrainRebirthAPI
@@ -21,8 +21,12 @@ permissions:
     children:
       minetrain.admin.list: true
       minetrain.admin.create: true
+      minetrain.admin.create.line: true
+      minetrain.admin.create.station: true
       minetrain.admin.remove: true
       minetrain.admin.edit: true
+      minetrain.admin.edit.line: true
+      minetrain.admin.edit.station: true
   minetrain.admin.list:
     description: Allows you to show the list
     default: op

@@ -265,7 +265,7 @@ public class Metrics {
 
 				for (RegisteredServiceProvider<?> provider : Bukkit.getServicesManager().getRegistrations(service)) {
 					try {
-						pluginData.add((String) provider.getService().getMethod("getPluginData").invoke(provider.getProvider()));
+						pluginData.addAll((JsonArray) provider.getService().getMethod("getPluginData").invoke(provider.getProvider()));
 					} catch (NullPointerException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
 					}
 				}
