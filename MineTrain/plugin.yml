@@ -1,7 +1,7 @@
 main: fr.dariusmtn.minetrain.Main
 version: b0.3
 name: MineTrainRebirth
-author: Flashi, Fuly
+author: Slaymd, Flashi, Fuly
 api: MineTrainRebirthAPI
 api-version: 1.13
 commands:
