@@ -22,6 +22,6 @@ Yes! That's why MineTrain lightness is great, you can create light rail (tramway
 
 <a href="https://github.com/Slaymd/MineTrain/wiki/Getting-Started"><img src="https://i.goopics.net/nZrbp.png" alt="Wiki button" width="293px"/></a>
 
-## :pencil: Discord
+## :pencil: Ideas
 
 Bugs and suggestions are welcome c:
