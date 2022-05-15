@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
@@ -102,8 +103,7 @@ public class VehicleMoveListener implements Listener {
 					}
 					FileConfiguration yml = YamlConfiguration.loadConfiguration(f);
 					if (yml.get("players." + e.getPlayer().getName()) != null) {
-						plugin.playerLastStation.put(e.getPlayer(),
-								(Location) yml.get("players." + e.getPlayer().getName()));
+						plugin.playerLastStation.put(e.getPlayer(), (Location) yml.get("players." + e.getPlayer().getName()));
 						yml.set("players." + e.getPlayer().getName(), null);
 						try {
 							yml.save(f);
@@ -134,8 +134,7 @@ public class VehicleMoveListener implements Listener {
 						ArrayList<Location> nearestSt = new ArrayList<Location>();
 						for (Location loc : plugin.getFileManager().getStationsStarts().keySet()) {
 							if (loc.distance(cartLoc) <= 4)
-								if (plugin.playerLastStation.containsKey(player)
-										&& plugin.playerLastStation.get(player) == loc) {
+								if (plugin.playerLastStation.containsKey(player) && plugin.playerLastStation.get(player) == loc) {
 									// station déjà passée
 								} else {
 									nearestSt.add(loc);
@@ -147,8 +146,7 @@ public class VehicleMoveListener implements Listener {
 							Location playerLastLoc = plugin.playerLastStation.get(player);
 							Station lastStation = new Station();
 							if (playerLastLoc != null)
-								lastStation = plugin.getFileManager().getStationsStarts()
-										.get(plugin.playerLastStation.get(player));
+								lastStation = plugin.getFileManager().getStationsStarts().get(plugin.playerLastStation.get(player));
 							for (Location station : nearestSt) {
 								Station st = plugin.getFileManager().getStationsStarts().get(station);
 								// brake
@@ -174,12 +172,24 @@ public class VehicleMoveListener implements Listener {
 									// Set last station
 									plugin.playerLastStation.put(player, station);
 									// Message
-									String[] stationMessage = plugin.getConfig().getString("titles.station")
-											.split("%newline%");
+									String[] stationMessage = plugin.getConfig().getString("titles.station").split("%newline%");
 
 									if (st.getStationId() != lastStation.getStationId()) {
 										Object event = new StationReachEvent(player, st);
 										Bukkit.getPluginManager().callEvent((Event) event);
+										player.playSound(player, Sound.BLOCK_FIRE_EXTINGUISH, 0.4f, 0.9f);
+										boolean station_bell = plugin.getConfig().getBoolean("station_bell");
+										if (station_bell) {
+											player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BELL, 1, 0.6f);
+											new BukkitRunnable() {
+
+												@Override
+												public void run() {
+													player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BELL, 1, 0.5f);
+
+												}
+											}.runTaskLaterAsynchronously(plugin, 20);
+										}
 									}
 
 									player.sendTitle(stationMessage[0].replace("%station%", st.getName()),
@@ -193,42 +203,34 @@ public class VehicleMoveListener implements Listener {
 											if (cart.getPassengers().contains(player)) {
 												if (vector == null) {
 													// terminus
-													player.sendMessage(
-															plugin.getConfig().getString("messages.terminus"));
+													player.sendMessage(plugin.getConfig().getString("messages.terminus"));
 													cart.eject();
 													cart.remove();
 													plugin.playerLastStation.remove(player);
-
 													Object event = new TerminusEvent(player);
 													Bukkit.getPluginManager().callEvent((Event) event);
-
+													Location ploc = player.getLocation().add(0, 1, 0);
+													player.teleport(ploc);
 												} else {
 													cart.setVelocity(vector.multiply(0.1));
 													if (plugin.getLinesMap().getNextStop(station) != null) {
 														Station nextstop = plugin.getLinesMap().getNextStop(station);
-														String[] nextStopTitle = plugin.getConfig()
-																.getString("titles.next_stop").split("%newline%");
-														player.sendTitle(
-																nextStopTitle[0].replace("%nextstop%",
-																		nextstop.getName()),
-																nextStopTitle[1].replace("%nextstop%",
-																		nextstop.getName()),
-																10, 40, 10);
+														String[] nextStopTitle = plugin.getConfig().getString("titles.next_stop")
+																.split("%newline%");
+														player.sendTitle(nextStopTitle[0].replace("%nextstop%", nextstop.getName()),
+																nextStopTitle[1].replace("%nextstop%", nextstop.getName()), 10, 40, 10);
 
 														Object event = new NextStopBroadcastEvent(player, nextstop);
 														Bukkit.getPluginManager().callEvent((Event) event);
 
 														// String corresp = "§e. Change for:§7 ";
-														String corresp = plugin.getConfig()
-																.getString("messages.change_for");
+														String corresp = plugin.getConfig().getString("messages.change_for");
 
 														// Line changes / searching acronyms
 														ArrayList<String> lineschange = new ArrayList<String>();
 														for (UUID lineId : nextstop.getLinesId()) {
-															if (!st.getStartLineId(station).toString()
-																	.equals(lineId.toString())) {
-																Line changeLine = plugin.getFileManager()
-																		.getLine(lineId);
+															if (!st.getStartLineId(station).toString().equals(lineId.toString())) {
+																Line changeLine = plugin.getFileManager().getLine(lineId);
 																String changeLineAcro = changeLine.getAcronym();
 																if (!lineschange.contains(changeLineAcro)) {
 																	lineschange.add(changeLineAcro);
@@ -244,8 +246,7 @@ public class VehicleMoveListener implements Listener {
 																corresp += changeLineAcro + "§7 ";
 															}
 														}
-														String nextStopMessage = plugin.getConfig()
-																.getString("messages.next_stop")
+														String nextStopMessage = plugin.getConfig().getString("messages.next_stop")
 																.replace("%nextstop%", nextstop.getName());
 														player.sendMessage(nextStopMessage + corresp);
 													}
@@ -288,8 +289,7 @@ public class VehicleMoveListener implements Listener {
 							for (Entity ent : nearbyEnts) {
 								if (ent instanceof Minecart) {
 									Minecart othercart = (Minecart) ent;
-									if (othercart.getPassengers().size() > 0
-											&& othercart.getPassengers().get(0) instanceof Player) {
+									if (othercart.getPassengers().size() > 0 && othercart.getPassengers().get(0) instanceof Player) {
 										Player otherplayer = (Player) othercart.getPassengers().get(0);
 										if (plugin.playerLastStation.containsKey(otherplayer)) {
 											// MineTrain cart with player
@@ -297,6 +297,7 @@ public class VehicleMoveListener implements Listener {
 											stoppedcarts.add(cart);
 											int tickcount = 0;
 											new BukkitRunnable() {
+
 												@Override
 												public void run() {
 													cart.setVelocity(cart.getVelocity().zero());
@@ -315,6 +316,7 @@ public class VehicleMoveListener implements Listener {
 										ent.remove();
 									}
 								} else {
+
 									// Send action
 									String action = plugin.getConfig().getString("nearby_entities_manager_mode");
 									plugin.getEntityPusher().pushEntity(ent, cart, action);

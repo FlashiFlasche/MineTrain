@@ -6,6 +6,11 @@ nearby_entities_manager: true
 #Modes: PUSH, KILL_ALL, KILL_NOPLAYER
 nearby_entities_manager_mode: PUSH
 
+#Stationbell: true, false
+#When starting/departing to a station, a sound will appear.
+#Set this to false to disable.
+station_bell: true
+
 #Configurable messages
 #
 #Placeholders:

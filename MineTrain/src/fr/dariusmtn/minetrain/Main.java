@@ -1,5 +1,7 @@
 package fr.dariusmtn.minetrain;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -53,10 +55,17 @@ public class Main extends JavaPlugin {
 		plugman.registerEvents(new BlockBreakListener(this), this);
 		// Config
 		saveDefaultConfig();
-		// Stats (bstats) https://bstats.org/plugin/bukkit/MineTrain
-		@SuppressWarnings("unused")
-		Metrics metrics = new Metrics(this);
+		getLogger().info("Fetching new configuration data...");
+		File configFile = new File(getDataFolder(), "config.yml");
 
+		try {
+			ConfigUpdater.update(this, "config.yml", configFile);
+		} catch (IOException e) {
+		  e.printStackTrace();
+		}
+		reloadConfig();
+		
+		// Stats (bstats) https://bstats.org/plugin/bukkit/MineTrain
 		String ver = getServer().getClass().getPackage().getName();
 		String sub = ver.substring(ver.lastIndexOf('.') + 1);
 		version = sub;
